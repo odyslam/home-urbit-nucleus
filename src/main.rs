@@ -10,10 +10,6 @@ use cli::Opts;
 
 mod api;
 mod cli;
-mod config;
-mod docker_driver;
-mod urbit_driver;
-mod utils;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
