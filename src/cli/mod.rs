@@ -1,6 +1,6 @@
 use crate::NucleusMode;
-use clap::{Parser, Subcommand};
-use std::{net::SocketAddrV4, path::PathBuf, str::FromStr};
+use clap::Parser;
+use std::{net::SocketAddrV4, path::PathBuf};
 
 #[derive(Clone, Debug, Parser)]
 #[clap(name = "nucleus", version = VERSION_MESSAGE, about = "The core of Home-Urbit")]

@@ -2,11 +2,10 @@ use actix_files;
 use actix_web::{middleware, web, App, HttpServer};
 use api::*;
 use std::{net::SocketAddrV4, str::FromStr};
-use tracing::{debug, info, Level};
+use tracing::{debug, info};
 use tracing_subscriber;
 
-use clap::{IntoApp, Parser};
-use clap_complete::generate;
+use clap::Parser;
 use cli::Opts;
 
 mod api;
@@ -39,7 +38,7 @@ async fn main() -> std::io::Result<()> {
  _(\    |@@|
 (__/\__ \--/ __
    \___|----|  |   __
-       \ }{ /\ )_ / _\
+     \ }}{{ /\ )_ / _\
        /\__/\ \__O (__
       (--/\--)    \__/
       _)(  )(_
@@ -51,8 +50,8 @@ async fn main() -> std::io::Result<()> {
     }
 }
 
-async fn start_api(bindOrNone: Option<SocketAddrV4>) -> std::io::Result<()> {
-    let bind = bindOrNone.unwrap_or_else(|| "127.0.0.1:6969".parse::<SocketAddrV4>().unwrap());
+async fn start_api(bind_or_none: Option<SocketAddrV4>) -> std::io::Result<()> {
+    let bind = bind_or_none.unwrap_or_else(|| "127.0.0.1:6969".parse::<SocketAddrV4>().unwrap());
     info!("Binding API server to {}", bind);
     HttpServer::new(|| {
         App::new()
@@ -78,8 +77,6 @@ async fn start_api(bindOrNone: Option<SocketAddrV4>) -> std::io::Result<()> {
     .run()
     .await
 }
-
-struct Config {}
 
 #[derive(Debug, Clone)]
 pub enum NucleusMode {
