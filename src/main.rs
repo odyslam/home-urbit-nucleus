@@ -1,19 +1,39 @@
 use actix_files;
 use actix_web::{middleware, web, App, HttpServer};
 use api::*;
+use std::{net::SocketAddrV4, str::FromStr};
 use tracing::{info, Level};
 use tracing_subscriber;
+
+use clap::{IntoApp, Parser};
+use clap_complete::generate;
+use cli::Opts;
+
 mod api;
+mod cli;
 mod config;
 mod docker_driver;
 mod urbit_driver;
+mod utils;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    // Enable logging
-    std::env::set_var("RUST_LOG", "DEBUG");
-    tracing_subscriber::fmt::init();
-    // Main actix web app
+    let opts = Opts::parse();
+    println!("{:?}", opts);
+    match opts {
+        Opts::StartServer {
+            bind,
+            config_dir,
+            docker_endpoint,
+            mode,
+            backup_dir,
+            backup_elapsed,
+        } => start_api(bind).await,
+    }
+}
+
+async fn start_api(bindOrNone: Option<SocketAddrV4>) -> std::io::Result<()> {
+    let bind = bindOrNone.unwrap_or_else(|| "127.0.0.1:6969".parse::<SocketAddrV4>().unwrap());
     HttpServer::new(|| {
         App::new()
             .wrap(middleware::Logger::default())
@@ -34,7 +54,27 @@ async fn main() -> std::io::Result<()> {
                     .route("/status", web::get().to(status)),
             )
     })
-    .bind(("127.0.0.1", 8080))?
+    .bind(bind)?
     .run()
     .await
+}
+
+struct Config {}
+
+#[derive(Debug)]
+pub enum NucleusMode {
+    Docker,
+    Process,
+}
+
+impl FromStr for NucleusMode {
+    type Err = String;
+
+    fn from_str(input: &str) -> Result<NucleusMode, Self::Err> {
+        match input {
+            "docker" => Ok(NucleusMode::Docker),
+            "process" => Ok(NucleusMode::Process),
+            _ => Err(format!("'{}' is not a valid value for NucleusMode", input)),
+        }
+    }
 }

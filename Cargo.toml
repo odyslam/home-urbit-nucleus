@@ -1,6 +1,6 @@
 [package]
-name        = "home-urbit-nucleus"
-description = "The nucleus is responsible for managing the lifecycle of Home-Urbit"
+name        = "nucleus"
+description = "The nucleus is responsible for managing the lifecycle of ~Home-Urbit (https://github.com/odyslam/home-urbit)"
 homepage    = "https://github.com/odyslam/home-urbit-nucleus"
 authors     = ["odysseas.eth"]
 version     = "0.1.0"
