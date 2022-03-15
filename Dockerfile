@@ -1,14 +1,14 @@
-FROM rust:latest as builder
+FROM rust:1.59 as builder
 
-RUN apt update && apt install -y
+RUN apt update && apt-get install -y
 
 WORKDIR /nucleus
 
-ADD . /nucleus
+COPY . /nucleus
 
 RUN cargo build --release
 
-FROM alpine:latest
+FROM alpine:3.15
 
 RUN apk --no-cache add ca-certificates vim
 
