@@ -51,3 +51,8 @@ jobs:
 
       - name: cargo clippy
         run: cargo +nightly clippy --all --all-features -- -D warnings
+
+      - name: Hadolint Dockerfile
+        uses: hadolint/hadolint-action@v1.4.0
+        with:
+          dockerfile: ./Dockerfile
