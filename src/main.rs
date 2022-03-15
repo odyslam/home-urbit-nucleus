@@ -2,7 +2,7 @@ use actix_files;
 use actix_web::{middleware, web, App, HttpServer};
 use api::*;
 use std::{net::SocketAddrV4, str::FromStr};
-use tracing::{info, Level};
+use tracing::{debug, info, Level};
 use tracing_subscriber;
 
 use clap::{IntoApp, Parser};
@@ -19,8 +19,7 @@ mod utils;
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let opts = Opts::parse();
-    println!("{:?}", opts);
-    match opts {
+    match opts.clone() {
         Opts::StartServer {
             bind,
             config_dir,
@@ -28,12 +27,33 @@ async fn main() -> std::io::Result<()> {
             mode,
             backup_dir,
             backup_elapsed,
-        } => start_api(bind).await,
+            logs,
+        } => {
+            std::env::set_var("RUST_LOG", logs.unwrap_or_else(|| "warn".to_string()));
+            tracing_subscriber::fmt::init();
+            debug!("{:?}", opts);
+            info!("Hello Martian, welcome to Nucleus!");
+            info!(
+                r#"
+         __
+ _(\    |@@|
+(__/\__ \--/ __
+   \___|----|  |   __
+       \ }{ /\ )_ / _\
+       /\__/\ \__O (__
+      (--/\--)    \__/
+      _)(  )(_
+     `---''---`
+     "#
+            );
+            start_api(bind).await
+        }
     }
 }
 
 async fn start_api(bindOrNone: Option<SocketAddrV4>) -> std::io::Result<()> {
     let bind = bindOrNone.unwrap_or_else(|| "127.0.0.1:6969".parse::<SocketAddrV4>().unwrap());
+    info!("Binding API server to {}", bind);
     HttpServer::new(|| {
         App::new()
             .wrap(middleware::Logger::default())
@@ -61,7 +81,7 @@ async fn start_api(bindOrNone: Option<SocketAddrV4>) -> std::io::Result<()> {
 
 struct Config {}
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum NucleusMode {
     Docker,
     Process,

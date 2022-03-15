@@ -2,7 +2,7 @@ use crate::NucleusMode;
 use clap::{Parser, Subcommand};
 use std::{net::SocketAddrV4, path::PathBuf, str::FromStr};
 
-#[derive(Debug, Parser)]
+#[derive(Clone, Debug, Parser)]
 #[clap(name = "nucleus", version = VERSION_MESSAGE, about = "The core of Home-Urbit")]
 pub enum Opts {
     #[clap(name = "start", about = "start nucleus and it's API server")]
@@ -53,6 +53,13 @@ pub enum Opts {
             env = "NUCLEUS_BACKUP_INTERVAL"
         )]
         backup_elapsed: Option<i64>,
+        #[clap(
+            name = "logging",
+            short,
+            long,
+            help = "Sets log level via RUST_LOG: debug, info, warn"
+        )]
+        logs: Option<String>,
     },
 }
 
