@@ -1,6 +1,5 @@
 FROM rust:1.59 as builder
 
-RUN rustup target add aarch64-unknown-none && rustup target add armv7-unknown-linux-gnueabihf
 RUN apt-get update
 
 WORKDIR /nucleus
