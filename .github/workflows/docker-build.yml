@@ -1,12 +1,7 @@
-name: DockerHub Publish CI
+name: Docker Build CI
 
 on:
-  schedule:
-    # Every day, at midnight
-    - cron: '24 13 * * *'
-  push:
-    branches: [ main ]
-    tags: [ 'v*.*.*' ]
+  pull_request:
 
 jobs:
   build:
@@ -21,7 +16,7 @@ jobs:
       - name: Hadolint
         uses: hadolint/hadolint-action@v1.4.0
         with:
-          dockerfile: ./Dockerfile
+          dockerfile: ./docker/Dockerfile
       - name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v1
@@ -30,7 +25,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-      - name: Build and push
+      - name: Build
         id: docker_build
         uses: docker/build-push-action@v2
         with:
@@ -41,7 +36,7 @@ jobs:
             linux/arm/v7
           file: ./Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
-          push: true
+          push: false
           tags:  ${{ secrets.DOCKER_HUB_USERNAME }}/home-urbit-nucleus:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
