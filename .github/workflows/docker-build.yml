@@ -33,6 +33,7 @@ jobs:
           platforms: |
             linux/amd64
             linux/arm64
+            linux/armv7
           file: ./Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           push: false
