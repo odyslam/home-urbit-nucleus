@@ -1,33 +1,19 @@
-use actix_files;
 use actix_web::{middleware, web, App, HttpServer};
 use api::*;
 use std::{net::SocketAddrV4, str::FromStr};
 use tracing::{debug, info};
-use tracing_subscriber;
 
 use clap::Parser;
 use cli::Opts;
 
 mod api;
 mod cli;
-mod config;
-mod docker_driver;
-mod urbit_driver;
-mod utils;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let opts = Opts::parse();
     match opts.clone() {
-        Opts::StartServer {
-            bind,
-            config_dir,
-            docker_endpoint,
-            mode,
-            backup_dir,
-            backup_elapsed,
-            logs,
-        } => {
+        Opts::StartServer { bind, logs, .. } => {
             std::env::set_var("RUST_LOG", logs.unwrap_or_else(|| "warn".to_string()));
             tracing_subscriber::fmt::init();
             debug!("{:?}", opts);
