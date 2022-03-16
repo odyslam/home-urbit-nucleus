@@ -16,7 +16,7 @@ jobs:
       - name: Hadolint
         uses: hadolint/hadolint-action@v1.4.0
         with:
-          dockerfile: ./docker/Dockerfile
+          dockerfile: ./Dockerfile
       - name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v1
