@@ -1,9 +1,6 @@
-name: DockerHub Publish CI
+name: Docker Build CI
 
 on:
-  push:
-    branches:
-      - master
   pull_request:
 
 jobs:
