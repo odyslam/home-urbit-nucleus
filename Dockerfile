@@ -1,6 +1,6 @@
 FROM rust:1.59 as builder
 
-RUN apt update && apt-get install -y
+RUN apt-get update
 
 WORKDIR /nucleus
 
@@ -10,6 +10,7 @@ RUN cargo build --release
 
 FROM alpine:3.15
 
+# hadolint ignore=DL3018
 RUN apk --no-cache add ca-certificates vim
 
 USER nucleus
