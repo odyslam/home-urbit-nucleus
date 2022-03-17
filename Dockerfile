@@ -1,5 +1,5 @@
 FROM rust:1.59 as builder
-RUN apt-get update
+RUN apt-get update && apt-get install build-essential
 
 WORKDIR /nucleus
 
