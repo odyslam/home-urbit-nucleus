@@ -39,6 +39,19 @@ async fn main() -> std::io::Result<()> {
 async fn start_api(bind_or_none: Option<SocketAddrV4>) -> std::io::Result<()> {
     let bind = bind_or_none.unwrap_or_else(|| "127.0.0.1:6969".parse::<SocketAddrV4>().unwrap());
     info!("Binding API server to {}", bind);
+    info!(
+        r#"
+--------------------
+| Active Endpoints: |
+--------------------
+{}/                   : User Dashboard
+{}/ui/dashboard       : Device's screen
+{}/api/v1/upload_key  : Endpoint to upload an Urbit ship's key
+{}/api/v1/upload_pier : Endpoint to upload an entire Urbit ship's pier
+{}/api/v1/status      : Endpoint that returns the status of the Nucleus and Home-Urbit
+"#,
+        bind, bind, bind, bind, bind
+    );
     HttpServer::new(|| {
         App::new()
             .wrap(middleware::Logger::default())
