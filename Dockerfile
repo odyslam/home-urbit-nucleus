@@ -1,7 +1,8 @@
-FROM rust:1.59-bullseye as builder
+FROM debian:bullseye as builder
 ARG DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update && apt-get install -y apt-utils build-essential
+RUN apt-get update && apt-get install -y build-essential curl
+RUN curl https://sh.rustup.rs -sSf | sh && source $HOME/.cargo/env && rustup update
 
 WORKDIR /nucleus
 
