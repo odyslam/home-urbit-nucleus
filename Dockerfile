@@ -3,6 +3,8 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y build-essential curl
 RUN curl https://sh.rustup.rs -sSf | sh && source $HOME/.cargo/env && rustup update
+# add docker to path
+ENV PATH="/root/.cargo/bin:${PATH}"
 
 WORKDIR /nucleus
 
