@@ -1,4 +1,3 @@
-# syntax = docker/dockerfile:experimental
 FROM rust:1.59 as builder
 RUN apt-get update
 
@@ -6,8 +5,7 @@ WORKDIR /nucleus
 
 COPY . /nucleus
 
-# RUN cargo build --release
-RUN --security=insecure mkdir -p /root/.cargo && chmod 777 /root/.cargo && mount -t tmpfs none /root/.cargo && cargo build --release
+RUN cargo build --release
 
 FROM alpine:3.15
 
