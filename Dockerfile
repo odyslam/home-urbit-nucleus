@@ -2,7 +2,8 @@
 FROM rust:1.59-bullseye as builder
 ARG DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update && apt-get install -y build-essential curl pkg-config ca-certificates
+# hadolint ignore=DL3008
+RUN apt-get update && apt-get install --no-install-recommends -y build-essential curl pkg-config ca-certificates
 # RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
 # add cargo to path
 # ENV PATH="/root/.cargo/bin:${PATH}"
