@@ -1,5 +1,6 @@
-FROM rust:1.59 as builder
-RUN apt-get update && apt-get install build-essential
+FROM rust:1.59-buster as builder
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y apt-utils build-essential
 
 WORKDIR /nucleus
 
